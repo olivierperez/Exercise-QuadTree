@@ -3,6 +3,7 @@ package fr.o80
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 
 class QuadTreeImplTest {
@@ -57,15 +58,43 @@ class QuadTreeImplTest {
     fun shouldIntersectSmallQuadTree() {
         // Given
         val quadTree = QuadTreeImpl(4, Rectangle(0f, 0f, 24f, 37f))
-
-        // When
         quadTree.add(Point(13f, 12f))
         quadTree.add(Point(23f, 35f))
+
+        // When
         val intersection = quadTree.intersectionWith(Rectangle(10f, 11f, 14f, 27f))
 
         // Then
         assertEquals(1, intersection.size)
         assertEquals(Point(13f, 12f), intersection[0])
+    }
+
+    @Test
+    @DisplayName("Intersect with with big QuadTree")
+    fun shouldIntersectBigQuadTree() {
+        // Given
+        val quadTree = QuadTreeImpl(4, Rectangle(0f, 0f, 100f, 100f))
+        quadTree.add(Point(50f, 15f))
+        quadTree.add(Point(10f, 50f))
+        quadTree.add(Point(44f, 56f))
+        quadTree.add(Point(47f, 47f)) // In the zone
+
+        quadTree.add(Point(49f, 49f)) // In the zone
+        quadTree.add(Point(49f, 51f)) // In the zone
+        quadTree.add(Point(51f, 51f)) // In the zone
+        quadTree.add(Point(51f, 49f)) // In the zone
+
+        // When
+        val intersection = quadTree.intersectionWith(Rectangle(45f, 45f, 55f, 55f))
+
+        // Then
+        assertEquals(4, quadTree.points.size)
+        assertEquals(5, intersection.size)
+        assertTrue(Point(47f, 47f) in intersection)
+        assertTrue(Point(49f, 49f) in intersection)
+        assertTrue(Point(49f, 51f) in intersection)
+        assertTrue(Point(51f, 51f) in intersection)
+        assertTrue(Point(51f, 49f) in intersection)
     }
 
 }
