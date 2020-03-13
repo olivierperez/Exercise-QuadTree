@@ -5,6 +5,7 @@ class QuadTreeImpl(
     private val zone: Rectangle
 ) : QuadTree {
 
+    private var subTreeInitialized = false
     internal var northEast: QuadTreeImpl? = null
     internal var northWest: QuadTreeImpl? = null
     internal var southEast: QuadTreeImpl? = null
@@ -14,25 +15,23 @@ class QuadTreeImpl(
 
     override fun add(point: Point) {
         if (point !in zone) return
-        
+
         if (points.size < maxSize) {
             points.add(point)
-        } else if (point.x <= zone.center.x && point.y <= zone.center.y) {
-            if (northWest == null)
-                northWest = QuadTreeImpl(maxSize, Rectangle(zone.min, zone.center))
-            northWest!!.add(point)
-        } else if (point.x <= zone.center.x && point.y > zone.center.y) {
-            if (southWest == null)
-                southWest = QuadTreeImpl(maxSize, Rectangle(zone.centerLeft, zone.bottomCenter))
-            southWest!!.add(point)
-        } else if (point.x > zone.center.x && point.y <= zone.center.y) {
-            if (northEast == null)
-                northEast = QuadTreeImpl(maxSize, Rectangle(zone.topCenter, zone.centerRight))
+        } else {
+            synchronized(subTreeInitialized) {
+                if (!subTreeInitialized) {
+                    northEast = QuadTreeImpl(maxSize, Rectangle(zone.topCenter, zone.centerRight))
+                    northWest = QuadTreeImpl(maxSize, Rectangle(zone.min, zone.center))
+                    southEast = QuadTreeImpl(maxSize, Rectangle(zone.center, zone.max))
+                    southWest = QuadTreeImpl(maxSize, Rectangle(zone.centerLeft, zone.bottomCenter))
+                    subTreeInitialized = true
+                }
+            }
             northEast!!.add(point)
-        } else if (point.x > zone.center.x && point.y > zone.center.y) {
-            if (southEast == null)
-                southEast = QuadTreeImpl(maxSize, Rectangle(zone.center, zone.max))
+            northWest!!.add(point)
             southEast!!.add(point)
+            southWest!!.add(point)
         }
     }
 
