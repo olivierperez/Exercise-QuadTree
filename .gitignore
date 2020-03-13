@@ -5,6 +5,8 @@ out/
 .idea/**/workspace.xml
 .idea/**/gradle.xml
 .idea/**/jarRepositories.xml
+.idea/**/.name
+.idea/**/vcs.xml
 
 *.log
 
