@@ -13,6 +13,8 @@ class QuadTreeImpl(
     internal val points: MutableList<Point> = mutableListOf()
 
     override fun add(point: Point) {
+        if (point !in zone) return
+        
         if (points.size < maxSize) {
             points.add(point)
         } else if (point.x <= zone.center.x && point.y <= zone.center.y) {

@@ -10,6 +10,19 @@ class QuadTreeImplTest {
     // TODO Check we can't add outside of QuadTree
 
     @Test
+    @DisplayName("A QuadTree should not add a point outside of its range")
+    fun shouldNotAddPoint() {
+        // Given
+        val quadTree = QuadTreeImpl(4, Rectangle(Point(0f, 0f), Point(100f, 100f)))
+
+        // When
+        quadTree.add(Point(-1f, 12f))
+
+        // Then
+        assertEquals(0, quadTree.points.size)
+    }
+
+    @Test
     @DisplayName("A QuadTree should add a point")
     fun shouldAddPoint() {
         // Given
