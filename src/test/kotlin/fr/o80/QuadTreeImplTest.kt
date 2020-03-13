@@ -46,10 +46,10 @@ class QuadTreeImplTest {
 
         // Then
         assertEquals(4, quadTree.points.size)
-        assertEquals(2, quadTree.northWest.points.size)
-        assertEquals(1, quadTree.southWest.points.size)
-        assertEquals(1, quadTree.northEast.points.size)
-        assertEquals(1, quadTree.southEast.points.size)
+        assertEquals(2, quadTree.northWest?.points?.size)
+        assertEquals(1, quadTree.southWest?.points?.size)
+        assertEquals(1, quadTree.northEast?.points?.size)
+        assertEquals(1, quadTree.southEast?.points?.size)
     }
 
     @Test

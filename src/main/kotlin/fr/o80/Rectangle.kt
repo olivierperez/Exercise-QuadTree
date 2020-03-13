@@ -27,4 +27,9 @@ class Rectangle(
         return "[${min.x},${min.y},${max.x},${max.y}]"
     }
 
+    operator fun contains(point: Point): Boolean {
+        return point.x >= min.x && point.x <= max.x &&
+                point.y >= min.y && point.y <= max.y
+    }
+
 }

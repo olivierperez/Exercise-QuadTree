@@ -5,10 +5,10 @@ class QuadTreeImpl(
     private val zone: Rectangle
 ) : QuadTree {
 
-    internal val northWest by lazy { QuadTreeImpl(maxSize, Rectangle(zone.min, zone.center)) }
-    internal val northEast by lazy { QuadTreeImpl(maxSize, Rectangle(zone.topCenter, zone.centerRight)) }
-    internal val southWest by lazy { QuadTreeImpl(maxSize, Rectangle(zone.centerLeft, zone.bottomCenter)) }
-    internal val southEast by lazy { QuadTreeImpl(maxSize, Rectangle(zone.center, zone.max)) }
+    internal var northEast: QuadTreeImpl? = null
+    internal var northWest: QuadTreeImpl? = null
+    internal var southEast: QuadTreeImpl? = null
+    internal var southWest: QuadTreeImpl? = null
 
     internal val points: MutableList<Point> = mutableListOf()
 
@@ -16,19 +16,36 @@ class QuadTreeImpl(
         if (points.size < maxSize) {
             points.add(point)
         } else if (point.x <= zone.center.x && point.y <= zone.center.y) {
-            northWest.add(point)
+            if (northWest == null)
+                northWest = QuadTreeImpl(maxSize, Rectangle(zone.min, zone.center))
+            northWest!!.add(point)
         } else if (point.x <= zone.center.x && point.y > zone.center.y) {
-            southWest.add(point)
+            if (southWest == null)
+                southWest = QuadTreeImpl(maxSize, Rectangle(zone.centerLeft, zone.bottomCenter))
+            southWest!!.add(point)
         } else if (point.x > zone.center.x && point.y <= zone.center.y) {
-            northEast.add(point)
+            if (northEast == null)
+                northEast = QuadTreeImpl(maxSize, Rectangle(zone.topCenter, zone.centerRight))
+            northEast!!.add(point)
         } else if (point.x > zone.center.x && point.y > zone.center.y) {
-            southEast.add(point)
+            if (southEast == null)
+                southEast = QuadTreeImpl(maxSize, Rectangle(zone.center, zone.max))
+            southEast!!.add(point)
         }
     }
 
     override fun intersectionWith(zone: Rectangle): List<Point> {
         return if (this.zone.isOverlapping(zone)) {
-            TODO()
+            val intersection = mutableListOf<Point>()
+
+            intersection.addAll(points.filter { it in zone })
+
+            northEast?.run { intersection.addAll(intersectionWith(zone)) }
+            northWest?.run { intersection.addAll(intersectionWith(zone)) }
+            southEast?.run { intersection.addAll(intersectionWith(zone)) }
+            southWest?.run { intersection.addAll(intersectionWith(zone)) }
+
+            intersection
         } else {
             emptyList()
         }
