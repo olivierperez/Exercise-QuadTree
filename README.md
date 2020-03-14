@@ -8,6 +8,7 @@
 ## Animated result
 
 <img src="doc/QuadTree.gif" alt="Animated quad tree"/>
+<img src="doc/QuadTree-search.gif" alt="Animated search quad tree"/>
 
 ## Biased result
 
