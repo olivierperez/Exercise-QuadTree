@@ -2,6 +2,7 @@ package fr.o80
 
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
@@ -36,7 +37,7 @@ internal class RectangleTest {
     }
 
     @Test
-    @DisplayName("Sometimes Rectanlge should not overlap each other")
+    @DisplayName("Sometimes Rectangle should not overlap each other")
     fun shouldNotBeDetectedAsOverlapping() {
         // Given
         val center = Rectangle(0f, 0f, 10f, 10f)
@@ -57,5 +58,24 @@ internal class RectangleTest {
         assertFalse(overlappingWithLeft)
         assertFalse(overlappingWithTop)
         assertFalse(overlappingWithBottom)
+    }
+
+    @Test
+    @DisplayName("Compute center of Rectangle")
+    fun shouldComputeCenter() {
+        // Given
+        val easyOne = Rectangle(0f, 0f, 40f, 40f)
+        val positiveOne = Rectangle(10f, 10f, 50f, 50f)
+        val halfWayOne = Rectangle(-10f, -10f, 90f, 90f)
+
+        // When
+        val easyCenter = easyOne.center
+        val positiveCenter = positiveOne.center
+        val halfWayCEnter = halfWayOne.center
+
+        // Then
+        assertEquals(Point(20f, 20f), easyCenter)
+        assertEquals(Point(30f, 30f), positiveCenter)
+        assertEquals(Point(40f, 40f), halfWayCEnter)
     }
 }

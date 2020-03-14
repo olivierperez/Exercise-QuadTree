@@ -8,7 +8,7 @@ class Rectangle(
     constructor(minX: Float, minY: Float, maxX: Float, maxY: Float) :
             this(Point(minX, minY), Point(maxX, maxY))
 
-    val center = Point((max.x - min.x) / 2, (max.y - min.y) / 2)
+    val center = Point(min.x + (max.x - min.x) / 2, min.y + (max.y - min.y) / 2)
     val topCenter get() = Point(center.x, min.y)
     val bottomCenter get() = Point(center.x, max.y)
     val centerRight get() = Point(max.x, center.y)
