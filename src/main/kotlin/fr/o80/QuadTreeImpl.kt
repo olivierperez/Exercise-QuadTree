@@ -2,7 +2,7 @@ package fr.o80
 
 class QuadTreeImpl(
     private val maxSize: Int,
-    private val zone: Rectangle
+    override val zone: Rectangle
 ) : QuadTree {
 
     private var subTreeInitialized = false
@@ -50,5 +50,21 @@ class QuadTreeImpl(
         } else {
             emptyList()
         }
+    }
+
+    override fun forEachTree(block: QuadTree.() -> Unit) {
+        this.block()
+        northEast?.forEachTree(block)
+        northWest?.forEachTree(block)
+        southEast?.forEachTree(block)
+        southWest?.forEachTree(block)
+    }
+
+    override fun forEachPoint(block: Point.() -> Unit) {
+        points.forEach(block)
+        northEast?.forEachPoint(block)
+        northWest?.forEachPoint(block)
+        southEast?.forEachPoint(block)
+        southWest?.forEachPoint(block)
     }
 }
