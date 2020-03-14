@@ -9,6 +9,10 @@
 
 <img src="doc/QuadTree.gif" alt="Animated quad tree"/>
 
+## Biased result
+
+<img src="doc/QuadTree-biased.gif" alt="Animated quad tree"/>
+
 ## Code
 
 - [Interface - QuadTree](src/main/kotlin/fr/o80/QuadTree.kt)
